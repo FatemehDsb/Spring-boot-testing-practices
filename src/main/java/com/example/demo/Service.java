@@ -6,7 +6,7 @@ public class Service {
 
 
     public Greeting greeting(){
-        return new Greeting();
+        return new Greeting("Banarne");
     }
 }
 

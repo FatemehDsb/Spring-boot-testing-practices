@@ -3,8 +3,8 @@ package com.example.demo;
 public class Greeting {
     private String message;
 
-    public Greeting() {
-        this.message = "hello there";
+    public Greeting(String name) {
+        this.message = name;
     }
 
     public String getMessage() {
