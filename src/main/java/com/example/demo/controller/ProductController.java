@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Product;
+import com.example.demo.model.dto.ProductRequestDTO;
+import com.example.demo.model.dto.ProductResponseDTO;
 import com.example.demo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,10 +42,10 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> addProduct(@RequestParam String name, @RequestParam double price){
-        Product p = new Product(-1, name,price);
-        p = service.addProduct(p);
-        return ResponseEntity.ok(p);
+    public ResponseEntity<ProductResponseDTO> addProduct(@RequestParam String name, @RequestParam double price, @RequestParam String rating){
+        ProductRequestDTO p = new ProductRequestDTO(name,price,rating);
+        ProductResponseDTO response = service.addProduct(p);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
@@ -52,9 +54,20 @@ public class ProductController {
         return removed ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestParam String name, @RequestParam double price){
+//        Product result = service.updateProduct(id, new Product(-1,name,price));
+//        if (result != null){
+//            return ResponseEntity.ok(result);
+//        } else{
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestParam String name, @RequestParam double price){
-        Product result = service.updateProduct(id, new Product(-1,name,price));
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable int id, @RequestBody ProductRequestDTO productDTO){
+        ProductResponseDTO result = service.updateProduct(id, productDTO);
         if (result != null){
             return ResponseEntity.ok(result);
         } else{

@@ -1,25 +1,19 @@
-package com.example.demo.model;
+package com.example.demo.model.dto;
 
-public class Product {
+public class ProductResponseDTO {
 
     private int id;
 
     private String name;
     private double price;
 
-    //användren behöver inte veta drtta
-    private String internalRating;
+    public ProductResponseDTO() {
+    }
 
-
-    public Product(int id, String name, double price, String internalRating) {
+    public ProductResponseDTO(int id, String name, double price) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.internalRating = internalRating;
-    }
-
-    public Product() {
-
     }
 
     public int getId() {
@@ -46,17 +40,9 @@ public class Product {
         this.price = price;
     }
 
-    public String getInternalRating() {
-        return internalRating;
-    }
-
-    public void setInternalRating(String internalRating) {
-        this.internalRating = internalRating;
-    }
-
     @Override
     public String toString() {
-        return "Product{" +
+        return "ProductResponseDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +

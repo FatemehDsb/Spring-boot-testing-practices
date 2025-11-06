@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Product;
+import com.example.demo.model.dto.ProductRequestDTO;
+import com.example.demo.model.dto.ProductResponseDTO;
 import com.example.demo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -28,24 +30,77 @@ public class ProductService {
         return repository.findByName(name);
     }
 
-    public Product addProduct(Product p){
-        return repository.save(p);
+    public ProductResponseDTO addProduct(ProductRequestDTO p){
+
+        return toResponseDTO(repository.save(toEntity(p)));
     }
 
     public boolean deleteById(int id){
         return repository.deleteById(id);
     }
 
-    public Product updateProduct(int id, Product product){
+    public void addInternalRating(int id, String internalRating){
+        Optional<Product> existing = repository.findById(id);
+        if(existing.isPresent()){
+            existing.get().setInternalRating(internalRating);
+        }
+    }
+
+    public ProductResponseDTO updateProduct(int id, ProductRequestDTO productDTO){
+
         Optional<Product> existing = repository.findById(id);
 
         if (existing.isPresent()){
+            existing.get().setName(productDTO.getName());
+            existing.get().setPrice(productDTO.getPrice());
+            existing.get().setInternalRating(productDTO.getInternalRating());
+            return toResponseDTO(existing.get());
+        }
+
+        return null;
+    }
+
+
+
+    public Product patchProduct(int id, Product product){
+        Optional<Product> existing = repository.findById(id);
+        if (existing.isPresent()){
+            if(product.getName() != null){
+
+            }
+            if(product.getPrice() != 0.0){
+
+            }
             Product p = existing.get();
             p.setName(product.getName());
             p.setPrice(product.getPrice());
             return  p;
         }
         return null;
+
+    }
+
+    private ProductResponseDTO toResponseDTO(Product product){
+
+        return new ProductResponseDTO(product.getId(), product.getName(), product.getPrice());
+    }
+
+    private Product toEntity(ProductRequestDTO request){
+       Product product = new Product();
+
+       if (!request.getName().isBlank()){
+           product.setName(request.getName());
+       }
+       if(request.getPrice() != 0.0){
+           product.setPrice(request.getPrice());
+       }
+
+       if (!request.getInternalRating().isBlank()){
+           product.setInternalRating(request.getInternalRating());
+
+       }
+       return product;
+
     }
 
 

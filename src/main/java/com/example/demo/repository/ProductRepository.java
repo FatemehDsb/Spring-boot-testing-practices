@@ -16,9 +16,9 @@ public class ProductRepository {
 
 
     public ProductRepository(){
-        products.add(new Product(1,"banana",20.0));
-        products.add(new Product(2,"apple",10.0));
-        products.add(new Product(3,"orange",7.0));
+        products.add(new Product(1,"banana",20.0, "bad"));
+        products.add(new Product(2,"apple",10.0, "good"));
+        products.add(new Product(3,"orange",7.0, "ok-ish"));
     }
 
     public List<Product> findAll(){
