@@ -4,6 +4,7 @@ import com.example.demo.model.Product;
 import com.example.demo.model.dto.ProductRequestDTO;
 import com.example.demo.model.dto.ProductResponseDTO;
 import com.example.demo.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +43,9 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponseDTO> addProduct(@RequestParam String name, @RequestParam double price, @RequestParam String rating){
-        ProductRequestDTO p = new ProductRequestDTO(name,price,rating);
-        ProductResponseDTO response = service.addProduct(p);
+    public ResponseEntity<ProductResponseDTO> addProduct(@Valid @RequestBody ProductRequestDTO request){
+
+        ProductResponseDTO response = service.addProduct(request);
         return ResponseEntity.ok(response);
     }
 

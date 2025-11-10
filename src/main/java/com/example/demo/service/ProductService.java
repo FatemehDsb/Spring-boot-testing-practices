@@ -88,14 +88,14 @@ public class ProductService {
     private Product toEntity(ProductRequestDTO request){
        Product product = new Product();
 
-       if (!request.getName().isBlank()){
+       if (request.getName() != null){
            product.setName(request.getName());
        }
-       if(request.getPrice() != 0.0){
+       if(request.getPrice() != null){
            product.setPrice(request.getPrice());
        }
 
-       if (!request.getInternalRating().isBlank()){
+       if (request.getInternalRating() != null){
            product.setInternalRating(request.getInternalRating());
 
        }

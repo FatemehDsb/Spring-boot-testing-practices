@@ -1,9 +1,16 @@
 package com.example.demo.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
 public class ProductRequestDTO {
 
+    @NotBlank(message = "name must be provided")
+    @Size(min = 2, message = "name must contain at least 2 characters")
     private String name;
-    private double price;
+    @Positive(message = "price must be positive")
+    private Double price;
 
     //användren behöver inte veta drtta
     private String internalRating;
@@ -11,13 +18,13 @@ public class ProductRequestDTO {
     public ProductRequestDTO() {
     }
 
-    public ProductRequestDTO(String name, double price) {
+    public ProductRequestDTO(String name, Double price) {
         this.name = name;
         this.price = price;
         this.internalRating = "";
     }
 
-    public ProductRequestDTO(String name, double price, String rating) {
+    public ProductRequestDTO(String name, Double price, String rating) {
         this.name = name;
         this.price = price;
         this.internalRating = rating;
@@ -31,11 +38,11 @@ public class ProductRequestDTO {
         this.name = name;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
