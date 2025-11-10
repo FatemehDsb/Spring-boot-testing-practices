@@ -5,12 +5,15 @@ import com.example.demo.model.dto.ProductRequestDTO;
 import com.example.demo.model.dto.ProductResponseDTO;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Validated
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -38,8 +41,11 @@ public class ProductController {
 
     //localhost:port/products/search?name=banana
     @GetMapping("/search")
-    public List<Product> search(@RequestParam String name){
-        return service.searchByName(name);
+    public List<Product> search(@RequestParam
+                                    @NotBlank
+                                    @Size(min = 2, message ="query must be at least 2 characters long")
+                                    String query){
+        return service.searchByName(query);
     }
 
     @PostMapping
