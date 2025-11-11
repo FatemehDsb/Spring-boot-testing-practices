@@ -1,8 +1,15 @@
 package com.example.demo.model;
 
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "products")
 public class Product {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     private String name;
     private double price;

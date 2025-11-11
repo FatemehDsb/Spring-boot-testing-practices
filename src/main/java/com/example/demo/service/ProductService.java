@@ -36,6 +36,7 @@ public class ProductService {
                 .stream()
                 .map(product -> toResponseDTO(product))
                 .toList();
+
     }
 
     public ProductResponseDTO addProduct(ProductRequestDTO p){
@@ -44,7 +45,11 @@ public class ProductService {
     }
 
     public boolean deleteById(int id){
-        return repository.deleteById(id);
+        if(repository.existsById(id)){
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     public void addInternalRating(int id, String internalRating){
@@ -62,6 +67,7 @@ public class ProductService {
             existing.get().setName(productDTO.getName());
             existing.get().setPrice(productDTO.getPrice());
             existing.get().setInternalRating(productDTO.getInternalRating());
+            repository.save(existing.get());
             return toResponseDTO(existing.get());
         }
 
@@ -82,6 +88,7 @@ public class ProductService {
             if (product.getInternalRating()!= null){
                 existing.get().setInternalRating(product.getInternalRating());
             }
+            repository.save(existing.get());
             return  toResponseDTO(existing.get());
         }
         return null;
