@@ -18,16 +18,24 @@ public class ProductService {
         this.repository = repository;
     }
 
-    public List<Product> getAll(){
-        return  repository.findAll();
+    public List<ProductResponseDTO> getAll(){
+        return  repository.findAll()
+                .stream().map(this::toResponseDTO)
+                .toList();
     }
 
-    public Optional<Product> getById(int id){
-        return repository.findById(id);
+    public Optional<ProductResponseDTO> getById(int id){
+        if(repository.findById(id).isPresent()){
+            return Optional.of(toResponseDTO(repository.findById(id).get()));
+        } else return Optional.empty();
+
     }
 
-    public List<Product> searchByName(String name){
-        return repository.findByName(name);
+    public List<ProductResponseDTO> searchByName(String name){
+        return repository.findByName(name)
+                .stream()
+                .map(product -> toResponseDTO(product))
+                .toList();
     }
 
     public ProductResponseDTO addProduct(ProductRequestDTO p){
@@ -62,19 +70,19 @@ public class ProductService {
 
 
 
-    public Product patchProduct(int id, Product product){
+    public ProductResponseDTO patchProduct(int id, ProductRequestDTO product){
         Optional<Product> existing = repository.findById(id);
         if (existing.isPresent()){
             if(product.getName() != null){
-
+                existing.get().setName(product.getName());
             }
-            if(product.getPrice() != 0.0){
-
+            if(product.getPrice() != null){
+                existing.get().setPrice(product.getPrice());
             }
-            Product p = existing.get();
-            p.setName(product.getName());
-            p.setPrice(product.getPrice());
-            return  p;
+            if (product.getInternalRating()!= null){
+                existing.get().setInternalRating(product.getInternalRating());
+            }
+            return  toResponseDTO(existing.get());
         }
         return null;
 

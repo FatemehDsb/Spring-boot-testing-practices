@@ -26,13 +26,13 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getAll(){
+    public List<ProductResponseDTO> getAll(){
         return service.getAll();
     }
 
     //localhost:port/products/3
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getByid(@PathVariable int id){
+    public ResponseEntity<ProductResponseDTO> getByid(@PathVariable int id){
         return service.getById(id)
                 .map(p -> ResponseEntity.status(200).body(p))
                 .orElse(ResponseEntity.status(418).build());
@@ -41,7 +41,7 @@ public class ProductController {
 
     //localhost:port/products/search?name=banana
     @GetMapping("/search")
-    public List<Product> search(@RequestParam
+    public List<ProductResponseDTO> search(@RequestParam
                                     @NotBlank
                                     @Size(min = 2, message ="query must be at least 2 characters long")
                                     String query){
