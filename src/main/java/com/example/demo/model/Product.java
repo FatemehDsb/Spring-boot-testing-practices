@@ -3,6 +3,8 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "products")
 public class Product {
@@ -13,6 +15,9 @@ public class Product {
 
     private String name;
     private double price;
+    private Category  category;
+    private Set<Supplier> suppliers;
+    private ProductDetails details;
 
     //användren behöver inte veta drtta
     private String internalRating;
