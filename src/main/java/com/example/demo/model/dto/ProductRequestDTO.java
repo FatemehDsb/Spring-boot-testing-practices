@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+import java.util.Set;
+
 public class ProductRequestDTO {
 
     @NotBlank(message = "name must be provided")
@@ -14,6 +16,12 @@ public class ProductRequestDTO {
 
     //användren behöver inte veta drtta
     private String internalRating;
+
+    private Long categoryId;
+    private Set<Long> supplierIds;
+    private String detailsDescription;
+
+    private String manufacturer;
 
     public ProductRequestDTO() {
     }
@@ -28,6 +36,38 @@ public class ProductRequestDTO {
         this.name = name;
         this.price = price;
         this.internalRating = rating;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Set<Long> getSupplierIds() {
+        return supplierIds;
+    }
+
+    public void setSupplierIds(Set<Long> supplierIds) {
+        this.supplierIds = supplierIds;
+    }
+
+    public String getDetailsDescription() {
+        return detailsDescription;
+    }
+
+    public void setDetailsDescription(String detailsDescription) {
+        this.detailsDescription = detailsDescription;
+    }
+
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
     public String getName() {

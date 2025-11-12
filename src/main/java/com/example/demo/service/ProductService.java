@@ -1,21 +1,39 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Category;
 import com.example.demo.model.Product;
+import com.example.demo.model.ProductDetails;
+import com.example.demo.model.Supplier;
 import com.example.demo.model.dto.ProductRequestDTO;
 import com.example.demo.model.dto.ProductResponseDTO;
+import com.example.demo.repository.CategoryRepository;
+import com.example.demo.repository.ProductDetailsRepository;
 import com.example.demo.repository.ProductRepository;
+import com.example.demo.repository.SupplierRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
 
     private final ProductRepository repository;
 
-    public ProductService(ProductRepository repository) {
+    private final CategoryRepository categoryRepository;
+
+    private final SupplierRepository supplierRepository;
+
+    private final ProductDetailsRepository productDetailsRepository;
+
+    public ProductService(ProductRepository repository, CategoryRepository categoryRepository, SupplierRepository supplierRepository, ProductDetailsRepository productDetailsRepository) {
         this.repository = repository;
+        this.categoryRepository = categoryRepository;
+        this.supplierRepository = supplierRepository;
+        this.productDetailsRepository = productDetailsRepository;
     }
 
     public List<ProductResponseDTO> getAll(){
@@ -39,9 +57,16 @@ public class ProductService {
 
     }
 
-    public ProductResponseDTO addProduct(ProductRequestDTO p){
+    public ProductResponseDTO addProduct(ProductRequestDTO dto){
+        Category category = categoryRepository.findById(dto.getCategoryId()).orElse(null);
+        Set<Supplier> suppliers = dto.getSupplierIds() != null
+                ? new HashSet<>(supplierRepository.findAllById(dto.getSupplierIds()))
+                : new HashSet<>();
+        ProductDetails details = new ProductDetails(dto.getDetailsDescription(),dto.getManufacturer());
 
-        return toResponseDTO(repository.save(toEntity(p)));
+        Product p = toEntity(dto,category,suppliers,details);
+
+        return toResponseDTO(repository.save(p));
     }
 
     public boolean deleteById(int id){
@@ -96,11 +121,23 @@ public class ProductService {
     }
 
     private ProductResponseDTO toResponseDTO(Product product){
+        String category = product.getCategory() != null ? product.getCategory().getName() : null;
+        Set<String> suppliers = product.getSuppliers() != null
+                ? product.getSuppliers().stream().map(Supplier::getName).collect(Collectors.toSet())
+                : Set.of();
 
-        return new ProductResponseDTO(product.getId(), product.getName(), product.getPrice());
+        return new ProductResponseDTO(product.getId(),
+                product.getName(),
+                product.getPrice(),
+                category,
+                suppliers,
+                product.getDetails());
     }
 
-    private Product toEntity(ProductRequestDTO request){
+    private Product toEntity(ProductRequestDTO request,
+                             Category category,
+                             Set<Supplier> suppliers,
+                             ProductDetails details){
        Product product = new Product();
 
        if (request.getName() != null){
@@ -114,6 +151,15 @@ public class ProductService {
            product.setInternalRating(request.getInternalRating());
 
        }
+       if(category != null){
+           product.setCategory(category);
+       }
+       product.setSuppliers(suppliers);
+       if(details != null){
+           product.setDetails(details);
+       }
+
+
        return product;
 
     }

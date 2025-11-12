@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -15,8 +16,17 @@ public class Product {
 
     private String name;
     private double price;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category  category;
+
+    @ManyToMany
+    @JoinTable(name = "product_suppliers",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "supplier_id"))
+    @JsonManagedReference
     private Set<Supplier> suppliers;
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private ProductDetails details;
 
     //användren behöver inte veta drtta
@@ -32,6 +42,34 @@ public class Product {
 
     public Product() {
 
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Set<Supplier> getSuppliers() {
+        return suppliers;
+    }
+
+    public void setSuppliers(Set<Supplier> suppliers) {
+        this.suppliers = suppliers;
+    }
+
+    public ProductDetails getDetails() {
+        return details;
+    }
+
+    public void setDetails(ProductDetails details) {
+        this.details = details;
     }
 
     public int getId() {

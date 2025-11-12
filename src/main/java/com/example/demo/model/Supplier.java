@@ -1,12 +1,22 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
 import java.util.Set;
 
+@Entity
+@Table(name = "suppliers")
 public class Supplier {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String contactEmail;
+    @ManyToMany(mappedBy = "suppliers")
+    @JsonBackReference
     private Set<Product> products;
 
     public Supplier() {
