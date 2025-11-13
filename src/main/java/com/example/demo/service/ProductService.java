@@ -62,9 +62,9 @@ public class ProductService {
         Set<Supplier> suppliers = dto.getSupplierIds() != null
                 ? new HashSet<>(supplierRepository.findAllById(dto.getSupplierIds()))
                 : new HashSet<>();
-        ProductDetails details = new ProductDetails(dto.getDetailsDescription(),dto.getManufacturer());
 
-        Product p = toEntity(dto,category,suppliers,details);
+
+        Product p = toEntity(dto,category,suppliers);
 
         return toResponseDTO(repository.save(p));
     }
@@ -136,8 +136,7 @@ public class ProductService {
 
     private Product toEntity(ProductRequestDTO request,
                              Category category,
-                             Set<Supplier> suppliers,
-                             ProductDetails details){
+                             Set<Supplier> suppliers){
        Product product = new Product();
 
        if (request.getName() != null){
@@ -155,8 +154,12 @@ public class ProductService {
            product.setCategory(category);
        }
        product.setSuppliers(suppliers);
-       if(details != null){
-           product.setDetails(details);
+       if(request.getManufacturer() != null || request.getDetailsDescription() != null){
+          ProductDetails details = new ProductDetails();
+          details.setManufacturer(request.getManufacturer());
+          details.setDescription(request.getDetailsDescription());
+          details.setProduct(product);
+          product.setDetails(details);
        }
 
 
