@@ -30,6 +30,16 @@ public class ProductController {
         return service.getAll();
     }
 
+    @GetMapping("/category")
+    public List<ProductResponseDTO> getByCategory(@RequestParam String name){
+        return service.findByCategory(name);
+    }
+
+    @GetMapping("/price")
+    public List<ProductResponseDTO> getByPriceBetween(@RequestParam Double min, @RequestParam Double max){
+        return service.findByPriceBetween(min,max);
+    }
+
     //localhost:port/products/3
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> getByid(@PathVariable int id){
@@ -47,6 +57,16 @@ public class ProductController {
                                     String query){
         return service.searchByName(query);
     }
+
+    @GetMapping("/find")
+    public List<ProductResponseDTO> find(@RequestParam
+                                           @NotBlank
+                                           @Size(min = 2, message ="query must be at least 2 characters long")
+                                           String query){
+        return service.findByName(query);
+    }
+
+
 
     @PostMapping
     public ResponseEntity<ProductResponseDTO> addProduct(@Valid @RequestBody ProductRequestDTO request){

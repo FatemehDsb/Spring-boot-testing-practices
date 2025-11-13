@@ -42,6 +42,12 @@ public class ProductService {
                 .toList();
     }
 
+    public List<ProductResponseDTO> findByPriceBetween(Double min, Double max){
+        return  repository.findByPriceBetween(min,max)
+                .stream().map(this::toResponseDTO)
+                .toList();
+    }
+
     public Optional<ProductResponseDTO> getById(int id){
         if(repository.findById(id).isPresent()){
             return Optional.of(toResponseDTO(repository.findById(id).get()));
@@ -50,9 +56,24 @@ public class ProductService {
     }
 
     public List<ProductResponseDTO> searchByName(String name){
+        return repository.searchByName(name)
+                .stream()
+                .map(product -> toResponseDTO(product))
+                .toList();
+
+    }
+
+    public List<ProductResponseDTO> findByName(String name){
         return repository.findByName(name)
                 .stream()
                 .map(product -> toResponseDTO(product))
+                .toList();
+
+    }
+    public List<ProductResponseDTO> findByCategory(String name){
+        return repository.findByCategoryName(name)
+                .stream()
+                .map(this::toResponseDTO)
                 .toList();
 
     }
@@ -68,6 +89,8 @@ public class ProductService {
 
         return toResponseDTO(repository.save(p));
     }
+
+
 
     public boolean deleteById(int id){
         if(repository.existsById(id)){
