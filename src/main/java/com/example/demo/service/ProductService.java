@@ -37,6 +37,8 @@ public class ProductService {
     }
 
     public List<ProductResponseDTO> getAll(){
+
+
         return  repository.findAll()
                 .stream().map(this::toResponseDTO)
                 .toList();
@@ -177,6 +179,7 @@ public class ProductService {
            product.setCategory(category);
        }
        product.setSuppliers(suppliers);
+
        if(request.getManufacturer() != null || request.getDetailsDescription() != null){
           ProductDetails details = new ProductDetails();
           details.setManufacturer(request.getManufacturer());
