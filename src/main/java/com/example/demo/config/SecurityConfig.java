@@ -1,7 +1,10 @@
 package com.example.demo.config;
 
+import com.example.demo.service.CustomUserDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,6 +20,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private  CustomUserDetailService customUserDetailService;
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
@@ -24,7 +31,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/","/public/**").permitAll()
-                        .requestMatchers("/products/**").authenticated())
+                        .requestMatchers(HttpMethod.GET,"/products/**").authenticated()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                        )
+                .userDetailsService(customUserDetailService)
+                .userDetailsService(userDetailsService())
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
