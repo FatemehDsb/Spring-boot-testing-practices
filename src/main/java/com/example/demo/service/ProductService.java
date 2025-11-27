@@ -64,6 +64,13 @@ public class ProductService {
                 .toList();
 
     }
+    public List<ProductResponseDTO> findCustom(String name){
+        return repository.searchByCategoryName(name)
+                .stream()
+                .map(product -> toResponseDTO(product))
+                .toList();
+
+    }
 
     public List<ProductResponseDTO> findByName(String name){
         return repository.findByName(name)
@@ -145,7 +152,7 @@ public class ProductService {
 
     }
 
-    private ProductResponseDTO toResponseDTO(Product product){
+    public ProductResponseDTO toResponseDTO(Product product){
         String category = product.getCategory() != null ? product.getCategory().getName() : null;
         Set<String> suppliers = product.getSuppliers() != null
                 ? product.getSuppliers().stream().map(Supplier::getName).collect(Collectors.toSet())
@@ -159,7 +166,7 @@ public class ProductService {
                 product.getDetails());
     }
 
-    private Product toEntity(ProductRequestDTO request,
+    public Product toEntity(ProductRequestDTO request,
                              Category category,
                              Set<Supplier> suppliers){
        Product product = new Product();
