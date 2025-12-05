@@ -14,7 +14,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true)
     private String name;
+
     private double price;
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -42,6 +44,18 @@ public class Product {
 
     public Product() {
 
+    }
+
+    public Product(String name, double price){
+        this.name = name;
+        this.price = price;
+
+    }
+
+    public Product(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
     }
 
     public void setId(Integer id) {

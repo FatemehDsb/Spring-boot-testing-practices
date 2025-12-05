@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.Category;
 import com.example.demo.model.Product;
 import com.example.demo.model.ProductDetails;
@@ -53,7 +54,7 @@ public class ProductService {
     public Optional<ProductResponseDTO> getById(int id){
         if(repository.findById(id).isPresent()){
             return Optional.of(toResponseDTO(repository.findById(id).get()));
-        } else return Optional.empty();
+        } else throw new NotFoundException("user with id " + id + " not found");
 
     }
 

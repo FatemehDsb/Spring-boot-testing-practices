@@ -4,9 +4,9 @@ import com.example.demo.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
@@ -26,7 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     public List<Product> findByPriceBetween(Double min, Double max);
 
-    public List<Product> findByName(String name);
+    public Optional<Product> findByName(String name);
 
     @Query("SELECT p FROM Product p WHERE p.price > :min")
     public List<Product> searchExpensive(@Param("min") double price);
